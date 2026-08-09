@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RGUKT HUB | Welcome</title>
+    <style>
+        :root { --primary: #4e73df; --glass: rgba(255, 255, 255, 0.9); }
+        * { box-sizing: border-box; font-family: 'Poppins', sans-serif; }
+        body { margin: 0; padding: 0; height: 100vh; display: flex; justify-content: center; align-items: center; background: linear-gradient(-45deg, #ee7752, #e73c7e, #23a6d5, #23d5ab); background-size: 400% 400%; animation: gradientBG 15s ease infinite; overflow: hidden; }
+        @keyframes gradientBG { 0% { background-position: 0% 50%; } 50% { background-position: 100% 50%; } 100% { background-position: 0% 50%; } }
+        .login-card { background: var(--glass); backdrop-filter: blur(10px); width: 90%; max-width: 400px; padding: 40px; border-radius: 30px; box-shadow: 0 25px 50px rgba(0,0,0,0.2); text-align: center; border: 1px solid rgba(255, 255, 255, 0.3); }
+        .logo-area { font-size: 80px; margin-bottom: 20px; animation: float 4s ease-in-out infinite; display: inline-block; }
+        @keyframes float { 0%, 100% { transform: translateY(0px); } 50% { transform: translateY(-20px); } }
+        h1 { font-size: 28px; margin: 0; background: linear-gradient(to right, #4e73df, #23a6d5); -webkit-background-clip: text; -webkit-text-fill-color: transparent; font-weight: 800; }
+        input { width: 100%; padding: 15px 20px; border-radius: 15px; border: 2px solid #e2e8f0; font-size: 16px; outline: none; transition: all 0.3s; background: rgba(255, 255, 255, 0.5); margin-top: 20px; }
+        .btn { background: var(--primary); color: white; border: none; width: 100%; padding: 16px; border-radius: 15px; font-size: 18px; font-weight: 700; cursor: pointer; transition: 0.3s; box-shadow: 0 10px 15px rgba(78, 115, 223, 0.4); margin-top: 20px; }
+        .dev-footer { margin-top: 30px; font-size: 10px; opacity: 0.6; text-transform: uppercase; }
+    </style>
+</head>
+<body>
+    <div class="login-card">
+        <div class="logo-area">🎓</div>
+        <h1>ENCO</h1>
+        <p style="color:#555">Engineering Content App</p>
+        <input type="text" id="username" placeholder="Enter your full name">
+        <button class="btn" onclick="login()">Start Learning ➔</button>
+        <div class="dev-footer">Developed by <b>Thushanth</b><br>RGUKTian | 2024 Batch</div>
+    </div>
+
+    <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-database-compat.js"></script>
+
+<script>
+    const firebaseConfig = {
+        apiKey: "AIzaSyCdZU9rZL72EOXIR9UfmZ7wFyv_pQAa0XY",
+        authDomain: "rgukt-hub-pro.firebaseapp.com",
+        databaseURL: "https://rgukt-hub-pro-default-rtdb.firebaseio.com",
+        projectId: "rgukt-hub-pro",
+        storageBucket: "rgukt-hub-pro.firebasestorage.app",
+        messagingSenderId: "395597268656",
+        appId: "1:395597268656:web:c2ac6e8fb36e7edebc9d75",
+        measurementId: "G-EV2LFHFKJQ"
+    };
+
+    firebase.initializeApp(firebaseConfig);
+    const db = firebase.database();
+
+    function login() {
+        const name = document.getElementById('username').value.trim();
+        
+        if (name.length < 3) { 
+            alert("Please enter a valid name."); 
+            return; 
+        }
+        
+        localStorage.setItem("rgukt_user", name);
+
+        // Record every entry in the 'logins' folder
+        db.ref('logins').push({
+            name: name,
+            time: new Date().toLocaleString()
+        }).then(() => {
+            window.location.href = "dashboard.html";
+        }).catch((error) => {
+            console.error("Error:", error);
+            window.location.href = "dashboard.html";
+        });
+    }
+
+    window.onload = () => {
+        if(localStorage.getItem("rgukt_user")) {
+            window.location.href = "dashboard.html";
+        }
+    }
+</script>
+</body>
+</html>
