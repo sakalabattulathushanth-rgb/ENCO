@@ -1,0 +1,372 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Library | RGUKT HUB</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap');
+        :root { --primary: #4e73df; --bg: #f4f7fe; --text: #1e293b; }
+        * { box-sizing: border-box; font-family: 'Poppins', sans-serif; -webkit-tap-highlight-color: transparent; }
+        body { margin: 0; background: var(--bg); color: var(--text); display: flex; justify-content: center; }
+        .app-shell { width: 100%; max-width: 420px; min-height: 100vh; padding-bottom: 40px; }
+        .header { background: linear-gradient(135deg, #4e73df, #22c55e); padding: 40px 25px 30px; border-bottom-left-radius: 35px; border-bottom-right-radius: 35px; color: white; box-shadow: 0 10px 20px rgba(78, 115, 223, 0.2); }
+        .back-btn { background: rgba(255,255,255,0.2); width: 40px; height: 40px; display: flex; align-items: center; justify-content: center; border-radius: 12px; margin-bottom: 20px; cursor: pointer; }
+        .subject-container { padding: 25px 20px; }
+        .subject-card { background: white; border-radius: 20px; margin-bottom: 15px; border: 1px solid #eef2f6; overflow: hidden; }
+        .sub-head { padding: 20px; cursor: pointer; display: flex; justify-content: space-between; align-items: center; font-weight: 600; font-size: 15px; }
+        .units-grid { display: none; grid-template-columns: 1fr 1fr; gap: 10px; padding: 15px; background: #f8fafc; border-top: 1px solid #eee; }
+        .unit-btn { background: white; border: 1px solid #e2e8f0; padding: 12px; border-radius: 12px; text-align: center; font-size: 13px; font-weight: 700; color: var(--primary); cursor: pointer; }
+        .modal-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); backdrop-filter: blur(5px); z-index: 1000; justify-content: center; align-items: center; }
+        .modal { background: white; width: 85%; max-width: 350px; border-radius: 30px; padding: 30px; text-align: center; animation: popIn 0.3s; }
+        @keyframes popIn { from { transform: scale(0.8); opacity: 0; } to { transform: scale(1); opacity: 1; } }
+        .modal h2 { margin: 0; font-size: 18px; color: var(--primary); }
+        .modal-btns { display: flex; flex-direction: column; gap: 12px; margin-top: 20px; }
+        .dl-btn { text-decoration: none; padding: 15px; border-radius: 15px; font-weight: 700; font-size: 14px; }
+        .mat-link { background: #eef2ff; color: var(--primary); border: 1px solid var(--primary); }
+        .writ-link { background: var(--primary); color: white; }
+        .dev-footer { text-align: center; font-size: 10px; opacity: 0.5; text-transform: uppercase; margin-top: 20px; }
+    </style>
+</head>
+<body>
+<div class="modal-overlay" id="modalOverlay">
+    <div class="modal">
+        <h2 id="modalUnitTitle">Unit 1</h2>
+        <p id="modalSubTitle" style="font-size:12px; opacity:0.6">Subject Name</p>
+        <div class="modal-btns">
+            <a href="#" id="matLink" class="dl-btn mat-link" target="_blank" rel="noopener noreferrer">Material Content</a>
+            <a href="#" id="writLink" class="dl-btn writ-link" target="_blank" rel="noopener noreferrer">Written Notes</a>
+        </div>
+        <p onclick="closeModal()" style="margin-top:20px; font-size:12px; font-weight:700; color:#999; cursor:pointer">CLOSE</p>
+    </div>
+</div>
+<div class="app-shell">
+    <div class="header">
+        <div class="back-btn" onclick="history.back()">←</div>
+        <h2 id="b-title">Branch</h2><p id="s-title" style="margin:5px 0 0; opacity:0.8; font-size:13px">Semester</p>
+    </div>
+    <div class="subject-container" id="container"></div>
+    <div class="dev-footer">Developed by <b>Thushanth</b><br>RGUKTian | 2024 Batch</div>
+</div>
+<script>
+    // Helper function to build 6 units with customizable defaults
+    function makeUnits() {
+        return {
+            "Unit 1": { "M": "#", "W": "#" },
+            "Unit 2": { "M": "#", "W": "#" },
+            "Unit 3": { "M": "#", "W": "#" },
+            "Unit 4": { "M": "#", "W": "#" },
+            "Unit 5": { "M": "#", "W": "#" },
+            "Unit 6": { "M": "#", "W": "#" }
+        };
+    }
+
+    const academicData = {
+        "E1": {
+            "CSE": {
+                "Sem-1": {
+                    "C & LA": makeUnits(),
+                    "BEEE": makeUnits(),
+                    "PSTC": makeUnits(),
+                    "IC": makeUnits(),
+                    "DT":makeUnits()
+                },
+                "Sem-2": {
+                    "DM": makeUnits(),
+                    "EP": makeUnits(),
+                    "OOPS": makeUnits(),
+                    "DS": makeUnits(),
+                    "MEFA": makeUnits(),
+                    "ES": makeUnits()
+                }
+            },
+            "ECE": {
+                "Sem-1": {
+                    "DEMC":  {
+            "Unit 1": { "M": "https://drive.google.com/file/d/1-m7bD2-esuFx1e89dS7DYQ9Pyw3Bz7aj/view?usp=drivesdk", "W": "#" },
+            "Unit 2": { "M": "https://drive.google.com/file/d/1wVCQS67qM-hh4_dlW_o0uy5_kulRsa8L/view?usp=drivesdk", "W": "#" },
+            "Unit 3": { "M": "https://drive.google.com/file/d/1y5aOyyg1JvuYTNe787Kf5cZtaO8TTL48/view?usp=drivesdk", "W": "#" },
+            "Unit 4": { "M": "https://drive.google.com/file/d/1xGL_IaBiPCS5QsTDWa5rn4pG0QPWRZXe/view?usp=drivesdk", "W": "#" },
+            "Unit 5": { "M": "https://drive.google.com/file/d/1PNIuDU_bdsk3wd1NdGFJezqZ1nnxB9ES/view?usp=drivesdk", "W": "#" },
+            "Unit 6": { "M": "https://drive.google.com/file/d/1vNhJouPZVN8xQvUaA6AX44fldPlB2Z3E/view?usp=drivesdk", "W": "#" }
+        },
+                    "CN":  {
+            "Unit 1": { "M": "#", "W": "#" },
+            "Unit 2": { "M": "#", "W": "#" },
+            "Unit 3": { "M": "#", "W": "#" },
+            "Unit 4": { "M": "#", "W": "#" },
+            "Unit 5": { "M": "#", "W": "#" },
+            "Unit 6": { "M": "#", "W": "#" }
+        },
+                    "EP":  {
+            "Unit 1": { "M": "#", "W": "https://drive.google.com/file/d/1jx5ZbRjvdOc9yTPZlXAG53b0gkSd6pRl/view?usp=drivesdk" },
+            "Unit 2": { "M": "#", "W": "https://drive.google.com/file/d/1flNSBk9arSceP6OsmRcHFKDmM97A4xhI/view?usp=drivesdk" },
+            "Unit 3": { "M": "#", "W": "https://drive.google.com/file/d/1NXFnOX7ff0DyKMQiX1gIky2r8e-wiCoB/view?usp=drivesdk" },
+            "Unit 4": { "M": "#", "W": "https://drive.google.com/file/d/1TW0KpTXv0aAmOVetssSFuonrNKyvHZkR/view?usp=drivesdk" },
+            "Unit 5": { "M": "#", "W": "https://drive.google.com/file/d/1Vz6tlfdFwXX1nqiSi0lknKwzi9aohtWA/view?usp=drivesdk" },
+            "Unit 6": { "M": "#", "W": "https://drive.google.com/file/d/110MFN3o67mZoiwkl5UVseNisl55-jNuC/view?usp=drivesdk" }
+        },
+                    "PDS":  {
+            "Unit 1": { "M": "#", "W": "#" },
+            "Unit 2": { "M": "#", "W": "#" },
+            "Unit 3": { "M": "#", "W": "#" },
+            "Unit 4": { "M": "#", "W": "#" },
+            "Unit 5": { "M": "#", "W": "#" },
+            "Unit 6": { "M": "#", "W": "#" }
+        },
+                    "AIML":  {
+            "Unit 1": { "M": "#", "W": "#" },
+            "Unit 2": { "M": "#", "W": "#" },
+            "Unit 3": { "M": "#", "W": "#" },
+            "Unit 4": { "M": "#", "W": "#" },
+            "Unit 5": { "M": "#", "W": "#" },
+            "Unit 6": { "M": "#", "W": "#" }
+        },
+                    "DT":  {
+            "Unit 1": { "M": "#", "W": "#" },
+            "Unit 2": { "M": "#", "W": "#" },
+            "Unit 3": { "M": "#", "W": "#" },
+            "Unit 4": { "M": "#", "W": "#" },
+            "Unit 5": { "M": "#", "W": "#" },
+            "Unit 6": { "M": "#", "W": "#" }
+        },
+                    "IKS / IC":  {
+            "Unit 1": { "M": "#", "W": "#" },
+            "Unit 2": { "M": "#", "W": "#" },
+            "Unit 3": { "M": "#", "W": "#" },
+            "Unit 4": { "M": "#", "W": "#" },
+            "Unit 5": { "M": "#", "W": "#" },
+            "Unit 6": { "M": "#", "W": "#" }
+        },
+                },
+                "Sem-2": {
+                    "MM": makeUnits(),
+                    "OOPS": makeUnits(),
+                    "EDC": makeUnits(),
+                    "NT": makeUnits(),
+                    "SS": makeUnits()
+                }
+            },
+            "EEE": {
+                "Sem-1": {
+                    "DEMC": makeUnits(),
+                    "EP": makeUnits(),
+                    "EGCD": makeUnits(),
+                    "ET": makeUnits(),
+                    "PDS": makeUnits()
+                },
+                "Sem-2": {
+                    "MM": makeUnits(),
+                    "DLD": makeUnits(),
+                    "EDC": makeUnits(),
+                    "NT": makeUnits(),
+                    "AI": makeUnits(),
+                    "ENGLISH": makeUnits()
+                }
+            },
+            "CIVIL": {
+                "Sem-1": {
+                    "DEMC": {
+            "Unit 1": { "M": "https://drive.google.com/file/d/1x2SSmHW31MgAkC3Q8kK4_0fIuo5g4VY9/view?usp=drivesdk", "W": "#" },
+            "Unit 2": { "M": "https://drive.google.com/file/d/1n9Y3jRI3MUEMVB8gM1tARMh6TRbZ3SKG/view?usp=drivesdk", "W": "#" },
+            "Unit 3": { "M": "https://drive.google.com/file/d/1n4LtTJldiMDBy6b5KkprYIb8pjuDkKQZ/view?usp=drivesdk", "W": "#" },
+            "Unit 4": { "M": "https://drive.google.com/file/d/1Kj5w9pTqbRRo4JESzVsNeLTMA6dD3vsz/view?usp=drivesdk", "W": "#" },
+            "Unit 5": { "M": "https://drive.google.com/file/d/1HaqzG1ns6Gx5tDvwuL8kxvTl314hIerS/view?usp=drivesdk", "W": "#" },
+            "Unit 6": { "M": "https://drive.google.com/file/d/1jgi0k1SgZefx7xNpZ8Ri9jw9MpZu3TJ1/view?usp=drivesdk", "W": "#" }
+        },
+                    "EP": {
+            "Unit 1": { "M": "#", "W": "#" },
+            "Unit 2": { "M": "#", "W": "#" },
+            "Unit 3": { "M": "#", "W": "#" },
+            "Unit 4": { "M": "#", "W": "#" },
+            "Unit 5": { "M": "#", "W": "#" },
+            "Unit 6": { "M": "#", "W": "#" }
+        },
+                    "EG": {
+                        "Unit 1": { "M": "https://drive.google.com/file/d/15px0ItS_oh1zXEgFpF2oHa50K8RcxuIS/view?usp=drivesdk", "W": "#" },
+                        "Unit 2": { "M": "https://drive.google.com/file/d/19cnJ6PxBt52PseKOcXJ_cB2ujrhm9eei/view?usp=drivesdk", "W": "#" },
+                        "Unit 3": { "M": "https://drive.google.com/file/d/1Sowt9tugUPjOJqKJQLT6ImsHRDE_8ENl/view?usp=drivesdk", "W": "#" },
+                        "Unit 4": { "M": "https://drive.google.com/file/d/12DELBzKQi8w8u3NYsroqEX3CDL8BiASA/view?usp=drivesdk", "W": "#" },
+                        "Unit 5": { "M": "https://drive.google.com/file/d/1zgWgiJIe3kHSfi_KdZ73Vn2XQE6A7B_H/view?usp=drivesdk", "W": "#" },
+                        "Unit 6": { "M": "https://docs.google.com/presentation/d/1nrZCduIR6yHFVLE29O13QG_11jZNOzp_/edit?usp=drivesdk&ouid=105360432356214922982&rtpof=true&sd=true", "W": "#" }
+                    },
+                    "EGCD": {
+            "Unit 1": { "M": "#", "W": "#" },
+            "Unit 2": { "M": "#", "W": "#" },
+            "Unit 3": { "M": "#", "W": "#" },
+            "Unit 4": { "M": "#", "W": "#" },
+            "Unit 5": { "M": "#", "W": "#" },
+            "Unit 6": { "M": "#", "W": "#" }
+        },
+                    "AIML": {
+            "Unit 1": { "M": "#", "W": "#" },
+            "Unit 2": { "M": "#", "W": "#" },
+            "Unit 3": { "M": "#", "W": "#" },
+            "Unit 4": { "M": "#", "W": "#" },
+            "Unit 5": { "M": "#", "W": "#" },
+            "Unit 6": { "M": "#", "W": "#" }
+        },
+                    "ELCS": {
+            "Unit 1": { "M": "#", "W": "#" },
+            "Unit 2": { "M": "#", "W": "#" },
+            "Unit 3": { "M": "#", "W": "#" },
+            "Unit 4": { "M": "#", "W": "#" },
+            "Unit 5": { "M": "#", "W": "#" },
+            "Unit 6": { "M": "#", "W": "#" }
+        },
+                    "ES": {
+            "Unit 1": { "M": "#", "W": "#" },
+            "Unit 2": { "M": "#", "W": "#" },
+            "Unit 3": { "M": "#", "W": "#" },
+            "Unit 4": { "M": "#", "W": "#" },
+            "Unit 5": { "M": "#", "W": "#" },
+            "Unit 6": { "M": "#", "W": "#" }
+        }
+                },
+                "Sem-2": {
+                    "EP": makeUnits(),
+                    "MM": makeUnits(),
+                    "BEEE": makeUnits(),
+                    "EM": makeUnits(),
+                    "EG": makeUnits(),
+                    "ES": makeUnits()
+                }
+            },
+            "CHEMICAL": {
+                "Sem-1": {
+                    "DEMC": makeUnits(),
+                    "CE": makeUnits(),
+                    "OC": makeUnits(),
+                    "SM": makeUnits(),
+                    "English": makeUnits(),
+                    "Biology": makeUnits()
+                },
+                "Sem-2": {
+                    "MM": makeUnits(),
+                    "EP": makeUnits(),
+                    "CPC": makeUnits(),
+                    "FM": makeUnits(),
+                    "PDS": makeUnits(),
+                    "EGCD": makeUnits()
+                }
+            }
+        },
+        "E2": {
+            "CSE": {
+                "Sem-1": {
+                    "P & S": makeUnits(),
+                    "DLD": makeUnits(),
+                    "DAA": makeUnits(),
+                    "DBMS": makeUnits(),
+                    "FLAT": makeUnits()
+                },
+                "Sem-2": {
+                    "IOR": makeUnits(),
+                    "COA": makeUnits(),
+                    "DSP": makeUnits(),
+                    "WEB": makeUnits(),
+                    "CD": makeUnits()
+                }
+            },
+            "ECE": {
+                "Sem-1": {
+                    "PRV": makeUnits(),
+                    "DLD": makeUnits(),
+                    "DSP": makeUnits(),
+                    "CS": makeUnits(),
+                    "AEC": makeUnits()
+                },
+                "Sem-2": {
+                    "CS 1": makeUnits(),
+                    "DSD": makeUnits(),
+                    "LIC": makeUnits(),
+                    "EWGM": makeUnits(),
+                    "RL": makeUnits()
+                }
+            },
+            "EEE": {
+                "Sem-1": {
+                    "P & RV": makeUnits(),
+                    "AEC": makeUnits(),
+                    "OOPS": makeUnits(),
+                    "SS": makeUnits(),
+                    "EM": makeUnits()
+                },
+                "Sem-2": {
+                    "PS-1": makeUnits(),
+                    "ML": makeUnits(),
+                    "CS": makeUnits(),
+                    "LIC": makeUnits(),
+                    "PE": makeUnits()
+                }
+            },
+            "CIVIL": {
+                "Sem-1": {
+                    "MEFA": makeUnits(),
+                    "BMC": makeUnits(),
+                    "CT": makeUnits(),
+                    "MOF": makeUnits(),
+                    "MOM-1": makeUnits(),
+                    "IC": makeUnits()
+                },
+                "Sem-2": {
+                    "HE": makeUnits(),
+                    "MOM-2": makeUnits(),
+                    "SM": makeUnits(),
+                    "SA": makeUnits(),
+                    "SURV-2": makeUnits(),
+                    "WRE": makeUnits()
+                }
+            },
+            "CHEMICAL": {
+                "Sem-1": {
+                    "Calculus": makeUnits(),
+                    "MT": makeUnits(),
+                    "Thermodynamics": makeUnits(),
+                    "HT": makeUnits(),
+                    "MUO": makeUnits(),
+                    "MEFA": makeUnits()
+                },
+                "Sem-2": {
+                    "BEEE": makeUnits(),
+                    "OOPS": makeUnits(),
+                    "CRE-1": makeUnits(),
+                    "MTO-1": makeUnits(),
+                    "TD-2": makeUnits()
+                }
+            }
+        }
+    };
+
+    window.onload = function() {
+        const p = new URLSearchParams(window.location.search);
+        const y = p.get('year'), b = p.get('branch'), s = p.get('sem');
+        document.getElementById('b-title').innerText = `${y} - ${b}`;
+        document.getElementById('s-title').innerText = s;
+        const container = document.getElementById('container');
+        if (academicData[y] && academicData[y][b] && academicData[y][b][s]) {
+            const subs = academicData[y][b][s];
+            for (let sub in subs) {
+                let unitsHTML = '';
+                for (let unit in subs[sub]) {
+                    unitsHTML += `<div class="unit-btn" onclick="openModal('${sub}', '${unit}', '${subs[sub][unit].M}', '${subs[sub][unit].W}')">${unit}</div>`;
+                }
+                container.innerHTML += `<div class="subject-card"><div class="sub-head" onclick="toggleUnits(this)">${sub} <span>▼</span></div><div class="units-grid">${unitsHTML}</div></div>`;
+            }
+        } else { container.innerHTML = "<p style='text-align:center; padding:50px; opacity:0.5'>📂 Subjects coming soon!</p>"; }
+    };
+
+    function toggleUnits(el) { const grid = el.nextElementSibling; const isVisible = grid.style.display === 'grid'; document.querySelectorAll('.units-grid').forEach(g => g.style.display = 'none'); grid.style.display = isVisible ? 'none' : 'grid'; }
+    
+    function openModal(sub, unit, mat, writ) { 
+        document.getElementById('modalUnitTitle').innerText = unit; 
+        document.getElementById('modalSubTitle').innerText = sub; 
+        document.getElementById('matLink').href = mat; 
+        document.getElementById('writLink').href = writ; 
+        document.getElementById('modalOverlay').style.display = 'flex'; 
+    }
+    
+    function closeModal() { document.getElementById('modalOverlay').style.display = 'none'; }
+</script>
+</body>
+</html>
